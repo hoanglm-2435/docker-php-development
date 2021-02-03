@@ -1,9 +1,4 @@
-version: "2.2"
-
-networks:
-  default:
-  frontend:
-    name: frontend
+version: '2.2'
 
 services:
   laravel-echo-server:
@@ -12,14 +7,12 @@ services:
     labels:
       - traefik.enable=true
       - traefik.port=6001
-      - traefik.http.routers.${COMPOSE_PROJECT_NAME}-laravel-echo.rule=Host(`${DOMAIN}`) && PathPrefix(`/socket.io`)
-      - traefik.http.services.${COMPOSE_PROJECT_NAME}-laravel-echo.loadbalancer.server.port=6001
-    networks:
-      - default
-      - frontend
+      - traefik.http.routers.laravel-echo.rule=Host(`${DOMAIN}`) && PathPrefix(`/socket.io`)
+      - traefik.http.services.laravel-echo.loadbalancer.server.port=6001
     environment:
       - REDIS_HOST=redis
       - REDIS_KEY_PREFIX=${LARAVEL_ECHO_SERVER_REDIS_KEY_PREFIX}
       - NODE_ENV=development
       - AUTH_HOST=http://api:80
       - AUTH_ENDPOINT=/broadcasting/auth
+      - DEV_MODE=true
